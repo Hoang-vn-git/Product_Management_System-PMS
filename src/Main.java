@@ -3,9 +3,10 @@ public class Main {
         Management management = new Management();
 
         management.addProduct();
+        System.out.println("-----------------------");
         management.display();
+        System.out.println("-----------------------");
         management.editProduct();
-        management.display();
 
 
 
