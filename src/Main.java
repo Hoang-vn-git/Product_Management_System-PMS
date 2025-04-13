@@ -3,7 +3,11 @@ public class Main {
         Management management = new Management();
 
         management.addProduct();
+        management.addProduct();
+        management.addProduct();
+        management.addProduct();
         management.sellProduct();
+        management.display();
 
 
 

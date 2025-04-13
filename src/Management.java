@@ -13,9 +13,8 @@ public class Management {
 
     public void display() {
         for (Product i : products) {
-            System.out.println("+-------------------------------+");
+            System.out.println("+----------------------------------------+");
             System.out.println(i.toString());
-            System.out.println("+-------------------------------+");
 
         }
     }
@@ -97,6 +96,7 @@ public class Management {
 
 
     }
+
     public void removeProduct() {
         System.out.print("Enter product name: ");
         String productName = scanner.nextLine();
@@ -109,10 +109,11 @@ public class Management {
             }
         }
     }
+
     public void checkProduct() {
         System.out.print("Enter product name: ");
         String productName = scanner.nextLine();
-        for(Product i : products) {
+        for (Product i : products) {
             if (productName.equalsIgnoreCase(i.getProductName())) {
                 System.out.println("+-------------------------------+");
                 System.out.println(i.toString());
@@ -122,22 +123,53 @@ public class Management {
     }
 
 
-
-
     public void sellProduct() {
+        ArrayList<Product> sellProducts = new ArrayList<>();
+        double subtotal = 0;
+        int sellQuantity;
+        int avalQuantity;
         System.out.print("Enter product name: ");
         String productName = scanner.nextLine();
-        for(Product i : products){
-            if(productName.equalsIgnoreCase(i.getProductName())) {
-                System.out.print("Enter quantity: ");
-                int quantity = scanner.nextInt();
-                scanner.nextLine();
-                i.setQuantity(i.getQuantity() - quantity);
-                double subtotal = quantity * i.getSellPrice();
-                System.out.println("Subtotal: " + subtotal );
-                System.out.println("Tax: " + subtotal * TAX_RATE );
-                System.out.println("Total: " + (subtotal + subtotal * TAX_RATE));
+        do {
+            for (Product i : products) {
+                if (productName.equalsIgnoreCase(i.getProductName())) {
+                    System.out.print("Enter quantity: ");
+                    sellQuantity = scanner.nextInt();
+                    scanner.nextLine();
+                    avalQuantity = i.getQuantity();
+                    i.setQuantity(sellQuantity);
+                    subtotal += sellQuantity * i.getSellPrice();
+                    Product product = new Product(i.getProductName(), i.getImportPrice(),i.getSellPrice() , i.getQuantity());
+                    sellProducts.add(product);
+                    i.setQuantity(avalQuantity - sellQuantity);
+                    System.out.print("Enter product name or press Y to checkout: ");
+                    productName = scanner.nextLine();
+                }
             }
+        } while (!productName.equalsIgnoreCase("Y"));
+
+
+        System.out.println("Subtotal: " + subtotal);
+        System.out.println("Tax: " + subtotal * TAX_RATE);
+        System.out.println("Total: " + (subtotal + subtotal * TAX_RATE));
+
+
+        System.out.print("Print a recipt?[Y/N]");
+        String answer = scanner.nextLine();
+        if (answer.equalsIgnoreCase("Y")) {
+            System.out.println("========== RECEIPT ==========");
+            for(Product i : sellProducts) {
+                System.out.printf("%-15s x%-2d %6.2f\n",
+                        i.getProductName(), i.getQuantity(),i.getSellPrice());
+            }
+            System.out.println("-----------------------------");
+            System.out.printf("Subtotal:%18.2f\n", subtotal);
+            System.out.printf("Tax (%.0f%%):%16.2f\n", TAX_RATE * 100, subtotal * TAX_RATE);
+            System.out.printf("Total:%21.2f\n", (subtotal + subtotal * TAX_RATE));
+            System.out.println("=============================");
+
+        } else {
+            System.out.println("Exit...");
         }
     }
 
