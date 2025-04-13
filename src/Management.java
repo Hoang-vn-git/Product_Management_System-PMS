@@ -13,15 +13,37 @@ public class Management {
         for (Product i:products){
             System.out.println("+-------------------------------+");
             System.out.println("|                               |");
-            System.out.println("|   " + i.toString());
+            System.out.println("    " + i.toString());
             System.out.println("|                               |");
             System.out.println("+-------------------------------+");
 
         }
     }
     public void editProduct(){
+            System.out.print("Enter product name: ");
+            String productName = scanner.nextLine();
         for (Product i:products){
-            System.out.println(i.getProductName());
+            if(productName.equalsIgnoreCase(i.getProductName())){
+                System.out.print("Edit product name: ");
+                String newName = scanner.nextLine();
+
+                System.out.print("Edit product import price: ");
+                double newImportPrice = scanner.nextDouble();
+
+                System.out.print("Edit product sell price: ");
+                double newSellPrice = scanner.nextDouble();
+
+                System.out.print("Edit quantity: ");
+                int newQuantity = scanner.nextInt();
+                scanner.nextLine();
+
+                i.setProductName(newName);
+                i.setImportPrice(newImportPrice);
+                i.setSellPrice(newSellPrice);
+                i.setQuantity(newQuantity);
+            } else {
+                System.out.println("Invalid product name.");
+            }
 
         }
 

@@ -3,7 +3,8 @@ public class Main {
         Management management = new Management();
 
         management.addProduct();
-        management.addProduct();
+        management.display();
+        management.editProduct();
         management.display();
 
 
