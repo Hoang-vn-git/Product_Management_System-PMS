@@ -4,10 +4,7 @@ public class Main {
 
         management.addProduct();
         management.addProduct();
-        management.addProduct();
-        management.addProduct();
         management.sellProduct();
-        management.display();
 
 
 
