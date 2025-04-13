@@ -13,9 +13,7 @@ public class Management {
     public void display() {
         for (Product i : products) {
             System.out.println("+-------------------------------+");
-            System.out.println("|                               |");
-            System.out.println("    " + i.toString());
-            System.out.println("|                               |");
+            System.out.println(i.toString());
             System.out.println("+-------------------------------+");
 
         }
@@ -28,12 +26,14 @@ public class Management {
         for (Product i : products) {
             if (productName.equalsIgnoreCase(i.getProductName())) {
                 do {
-                    System.out.println("Choose thing you would like to edit: ");
-                    System.out.println("1: Name of the product");
-                    System.out.println("2: Import price of the product");
-                    System.out.println("3: Sell price of the product");
-                    System.out.println("4: Quantity of the product");
-                    System.out.println("5. Exit");
+                    System.out.println("+--------------------------------+");
+                    System.out.println("|           Edit menu            |");
+                    System.out.println("| 1: Name of the product         |");
+                    System.out.println("| 2: Import price of the product |");
+                    System.out.println("| 3: Sell price of the product   |");
+                    System.out.println("| 4: Quantity of the product     |");
+                    System.out.println("| 5. Exit                        |");
+                    System.out.println("+--------------------------------+");
                     option = scanner.nextLine();
 
                     switch (option) {
@@ -99,7 +99,9 @@ public class Management {
     public void removeProduct() {
 
     }
-    
+    public void checkProduct() {
+
+    }
     public void sellProduct() {
 
     }
