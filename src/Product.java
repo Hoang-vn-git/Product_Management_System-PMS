@@ -45,6 +45,6 @@ public class Product {
     }
     @Override
     public String toString() {
-        return "| Product name: " + getProductName() +"          |"+ " \n| Price: " + getSellPrice() + "                   |"+  " \n| Quantity: " + getQuantity() + "                  |" ;
+        return "| Product name: " + getProductName()+ " \n| Price: " + getSellPrice() + " \n| Quantity: " + getQuantity();
     }
 }

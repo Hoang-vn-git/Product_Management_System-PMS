@@ -5,6 +5,7 @@ public class Management {
     private double totalRevenue;
     private double totalProfit;
     private double totalCost;
+    private final double TAX_RATE = 0.13;
 
 
     ArrayList<Product> products = new ArrayList<>();
@@ -97,13 +98,47 @@ public class Management {
 
     }
     public void removeProduct() {
-
+        System.out.print("Enter product name: ");
+        String productName = scanner.nextLine();
+        for (int i = 0; i < products.size(); i++) {
+            if (productName.equalsIgnoreCase(products.get(i).getProductName())) {
+                products.remove(i);
+            } else {
+                System.out.println("Invalid product name.");
+                break;
+            }
+        }
     }
     public void checkProduct() {
-
+        System.out.print("Enter product name: ");
+        String productName = scanner.nextLine();
+        for(Product i : products) {
+            if (productName.equalsIgnoreCase(i.getProductName())) {
+                System.out.println("+-------------------------------+");
+                System.out.println(i.toString());
+                System.out.println("+-------------------------------+");
+            }
+        }
     }
-    public void sellProduct() {
 
+
+
+
+    public void sellProduct() {
+        System.out.print("Enter product name: ");
+        String productName = scanner.nextLine();
+        for(Product i : products){
+            if(productName.equalsIgnoreCase(i.getProductName())) {
+                System.out.print("Enter quantity: ");
+                int quantity = scanner.nextInt();
+                scanner.nextLine();
+                i.setQuantity(i.getQuantity() - quantity);
+                double subtotal = quantity * i.getSellPrice();
+                System.out.println("Subtotal: " + subtotal );
+                System.out.println("Tax: " + subtotal * TAX_RATE );
+                System.out.println("Total: " + (subtotal + subtotal * TAX_RATE));
+            }
+        }
     }
 
 
