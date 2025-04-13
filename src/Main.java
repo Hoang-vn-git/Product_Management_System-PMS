@@ -1,5 +1,14 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        Management management = new Management();
+
+        management.addProduct();
+        management.addProduct();
+        management.display();
+
+
+
+
+        ;
     }
 }
