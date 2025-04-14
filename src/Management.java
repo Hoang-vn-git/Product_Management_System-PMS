@@ -221,21 +221,20 @@ public class Management {
         System.out.print("Enter product name: ");
         String productName = scanner.nextLine();
         do {
-//            do {
                 for (Product i : products) {
                     if (productName.equalsIgnoreCase(i.getProductName())) {
                         isFounded = i;
                         break;
                     }
+                }
                     if (isFounded == null){
                         System.out.println("+--------------------------------+");
                         System.out.println("|       Product not found        |");
                         System.out.println("+--------------------------------+");
                         System.out.print("Enter again: ");
                         productName = scanner.nextLine();
+                        continue;
                     }
-                }
-//            } while(isFounded == null);
 
 
 
@@ -244,8 +243,8 @@ public class Management {
                 sellQuantity = scanner.nextInt();
                 scanner.nextLine();
                 do {
-                    if (sellQuantity > isFounded.getQuantity() || sellQuantity < 0) {
-                        System.out.printf("Enter quantity less than or equal to available quantity (x%d).\n", isFounded.getQuantity());
+                    if (sellQuantity > isFounded.getQuantity() || sellQuantity <= 0) {
+                        System.out.printf("Enter quantity match with available quantity (x%d).\n", isFounded.getQuantity());
                         System.out.print("Enter quantity: ");
                         sellQuantity = scanner.nextInt();
                         scanner.nextLine();
@@ -266,6 +265,7 @@ public class Management {
 
             System.out.print("Enter product name to continue or press Y to checkout: ");
             productName = scanner.nextLine();
+            isFounded = null;
 
         } while (!productName.equalsIgnoreCase("Y"));
         System.out.println("+--------------------------------+");
@@ -290,7 +290,7 @@ public class Management {
             }
             System.out.println("-----------------------------");
             System.out.printf("Subtotal:%18.2f\n", subtotal);
-            System.out.printf("Tax (%.0f%%):%16.2f\n", TAX_RATE * 100, subtotal * TAX_RATE);
+            System.out.printf("Tax (%.0f%%):%17.2f\n", TAX_RATE * 100, subtotal * TAX_RATE);
             System.out.printf("Total:%21.2f\n", (subtotal + subtotal * TAX_RATE));
             System.out.println("======= END OF RECEIPT ======");
 
