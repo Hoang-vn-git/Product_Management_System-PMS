@@ -145,6 +145,7 @@ public class Management {
                     System.out.print("Enter product name or press Y to checkout: ");
                     productName = scanner.nextLine();
                 }
+                
             }
         } while (!productName.equalsIgnoreCase("Y"));
 
