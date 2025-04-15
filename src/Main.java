@@ -11,7 +11,8 @@ public class Main {
             System.out.println("| 1: Add product                 |");
             System.out.println("| 2: Checkout                    |");
             System.out.println("| 3: Display                     |");
-            System.out.println("| 4: Exit                        |");
+            System.out.println("| 4: Edit product                |");
+            System.out.println("| 5: Exit                        |");
             System.out.println("==================================");
             System.out.print("Enter option: ");
             option = scanner.nextInt();
@@ -26,13 +27,15 @@ public class Main {
                 case 3:
                     management.display();
                     break;
+                case 4:
+                    management.editProduct();
+                    break;
                 default:
                     System.out.println("======== Exiting =======");
             }
 
 
-        } while (!(option == 4));
-
+        } while (!(option == 5));
 
 
     }
