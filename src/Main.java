@@ -21,7 +21,7 @@ public class Main {
                     management.addProduct();
                     break;
                 case 2:
-                    management.sellProduct();
+                    management.checkoutProduct();
                     break;
                 case 3:
                     management.display();

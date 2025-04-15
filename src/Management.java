@@ -85,9 +85,23 @@ public class Management {
         double importPrice;
         double sellPrice;
         int quantity;
+        boolean isExist = false;
 
-        System.out.print("Enter product name: ");
-        productName = scanner.nextLine();
+        do {
+            System.out.print("Enter product name: ");
+            productName = scanner.nextLine();
+            isExist = false;
+            for (Product i : products) {
+                if (productName.equalsIgnoreCase(i.getProductName())) {
+                    System.out.println("+--------------------------------+");
+                    System.out.println("|      Product already exists    |");
+                    System.out.println("+--------------------------------+");
+                    isExist = true;
+                    break;
+                }
+
+            }
+        } while (isExist);
 
 
         do {
@@ -213,17 +227,24 @@ public class Management {
     }
 
 
-    public void sellProduct() {
+    public void checkoutProduct() {
         ArrayList<Product> sellProducts = new ArrayList<>();
         double subtotal = 0;
         int sellQuantity;
         Product isFounded = null;
+        boolean isSoldOut = false;
         System.out.print("Enter product name: ");
         String productName = scanner.nextLine();
         do {
                 for (Product i : products) {
                     if (productName.equalsIgnoreCase(i.getProductName())) {
                         isFounded = i;
+                        if(isFounded.getQuantity() == 0){
+                            isSoldOut = true;
+                            System.out.println("+--------------------------------+");
+                            System.out.println("|           Sold out             |");
+                            System.out.println("+--------------------------------+");
+                        }
                         break;
                     }
                 }
@@ -238,34 +259,37 @@ public class Management {
 
 
 
-            try {
-                System.out.print("Enter quantity: ");
-                sellQuantity = scanner.nextInt();
-                scanner.nextLine();
-                do {
-                    if (sellQuantity > isFounded.getQuantity() || sellQuantity <= 0) {
-                        System.out.printf("Enter quantity match with available quantity (x%d).\n", isFounded.getQuantity());
-                        System.out.print("Enter quantity: ");
-                        sellQuantity = scanner.nextInt();
-                        scanner.nextLine();
-                    }
-                } while (!(sellQuantity <= isFounded.getQuantity() && sellQuantity > 0));
-                subtotal += sellQuantity * isFounded.getSellPrice();
-                Product product = new Product(isFounded.getProductName(), isFounded.getImportPrice(), isFounded.getSellPrice(), sellQuantity);
-                sellProducts.add(product);
-                isFounded.setQuantity(isFounded.getQuantity() - sellQuantity);
+           if (!isSoldOut) {
+               try {
+                   System.out.print("Enter quantity: ");
+                   sellQuantity = scanner.nextInt();
+                   scanner.nextLine();
+                   do {
+                       if (sellQuantity > isFounded.getQuantity() || sellQuantity <= 0) {
+                           System.out.printf("Enter quantity match with available quantity (x%d).\n", isFounded.getQuantity());
+                           System.out.print("Enter quantity: ");
+                           sellQuantity = scanner.nextInt();
+                           scanner.nextLine();
+                       }
+                   } while (!(sellQuantity <= isFounded.getQuantity() && sellQuantity > 0));
+                   subtotal += sellQuantity * isFounded.getSellPrice();
+                   Product product = new Product(isFounded.getProductName(), isFounded.getImportPrice(), isFounded.getSellPrice(), sellQuantity);
+                   sellProducts.add(product);
+                   isFounded.setQuantity(isFounded.getQuantity() - sellQuantity);
 
-            } catch (Exception E) {
-                System.out.println("+--------------------------------+");
-                System.out.println("|         Invalid input          |");
-                System.out.println("+--------------------------------+");
-                scanner.nextLine();
-                continue;
-            }
+               } catch (Exception E) {
+                   System.out.println("+--------------------------------+");
+                   System.out.println("|         Invalid input          |");
+                   System.out.println("+--------------------------------+");
+                   scanner.nextLine();
+                   continue;
+               }
+           }
 
             System.out.print("Enter product name to continue or press Y to checkout: ");
             productName = scanner.nextLine();
             isFounded = null;
+            isSoldOut = false;
 
         } while (!productName.equalsIgnoreCase("Y"));
         System.out.println("+--------------------------------+");
@@ -273,7 +297,7 @@ public class Management {
         System.out.println("+--------------------------------+");
         System.out.println("=============================");
         System.out.printf("Subtotal: %.2f\n", subtotal);
-        System.out.printf("Tax: %.2f\n", subtotal * TAX_RATE);
+        System.out.printf("Tax (%.0f%%): %.2f\n",TAX_RATE * 100, subtotal * TAX_RATE);
         System.out.printf("Total: %.2f\n", (subtotal + subtotal * TAX_RATE));
         System.out.println("=============================");
 
@@ -284,15 +308,15 @@ public class Management {
             System.out.println("+--------------------------------+");
             System.out.println("|          Printing...           |");
             System.out.println("+--------------------------------+");
-            System.out.println("========== RECEIPT ==========");
+            System.out.println("============ RECEIPT ============");
             for (Product i : sellProducts) {
-                System.out.printf("%-15s x%-2d %6.2f\n", i.getProductName(), i.getQuantity(), i.getSellPrice());
+                System.out.printf("%-15s x%-2d %6.2f %6.2f\n", i.getProductName(), i.getQuantity(), i.getSellPrice(), i.getSellPrice()*i.getQuantity());
             }
-            System.out.println("-----------------------------");
-            System.out.printf("Subtotal:%18.2f\n", subtotal);
-            System.out.printf("Tax (%.0f%%):%17.2f\n", TAX_RATE * 100, subtotal * TAX_RATE);
-            System.out.printf("Total:%21.2f\n", (subtotal + subtotal * TAX_RATE));
-            System.out.println("======= END OF RECEIPT ======");
+            System.out.println("---------------------------------");
+            System.out.printf("Subtotal:%24.2f\n", subtotal);
+            System.out.printf("Tax (%.0f%%):%23.2f\n", TAX_RATE * 100, subtotal * TAX_RATE);
+            System.out.printf("Total:%27.2f\n", (subtotal + subtotal * TAX_RATE));
+            System.out.println("========= END OF RECEIPT ========");
 
         } else {
             System.out.println("+--------------------------------+");
