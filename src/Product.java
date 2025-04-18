@@ -50,7 +50,7 @@ public class Product {
                         "| Import price: %-24.2f |\n" +
                         "| Price:        %-24.2f |\n" +
                         "| Quantity:     %-24d |",
-                getProductName(), getSellPrice(),getImportPrice(), getQuantity()
+                getProductName(),getImportPrice(),getSellPrice(), getQuantity()
         );
     }
 }

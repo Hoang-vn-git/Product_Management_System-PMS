@@ -1,0 +1,14 @@
+[
+  {
+    "productName": "banana",
+    "importPrice": 2.0,
+    "sellPrice": 2.0,
+    "quantity": 2
+  },
+  {
+    "productName": "apple",
+    "importPrice": 2.0,
+    "sellPrice": 2.0,
+    "quantity": 2
+  }
+]

@@ -1,5 +1,12 @@
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class Management {
     private double totalRevenue;
@@ -16,7 +23,10 @@ public class Management {
     }
 
 
-    ArrayList<Product> products = new ArrayList<>();
+    ArrayList<Product> products = new ArrayList<>(); // Array for current product
+    ArrayList<Product> importProducts = new ArrayList<>();
+    ArrayList<Product> sellProducts = new ArrayList<>(); // Array for selling product
+    ArrayList<Product> soldProducts = new ArrayList<>(); // Array for sold product
     Scanner scanner = new Scanner(System.in);
 
     public void display() {
@@ -145,7 +155,7 @@ public class Management {
                                 i.setQuantity(quantity);
                                 break;
                             case "5":
-
+                                exportData();
                                 break;
                             default:
                                 System.out.println("+--------------------------------+");
@@ -270,12 +280,12 @@ public class Management {
             System.out.print("Press Y to continue or N to exit: ");
             productName = scanner.nextLine();
         } while (!productName.equalsIgnoreCase("N"));
-
+//        importProducts.addAll(products);
+        exportData();
     }
 
 
     public void checkoutProduct() {
-        ArrayList<Product> sellProducts = new ArrayList<>(); // New array for selling product
         double subtotal = 0;
         int sellQuantity;
         Product isFounded = null;
@@ -383,6 +393,9 @@ public class Management {
             System.out.println("|          Exiting...            |");
             System.out.println("+--------------------------------+");
         }
+//        soldProducts.addAll(sellProducts);
+//        sellProducts.clear();
+        exportData();
     }
 
     public void removeProduct() {
@@ -416,6 +429,7 @@ public class Management {
         System.out.println("+--------------------------------+");
         System.out.println("|          Exiting...            |");
         System.out.println("+--------------------------------+");
+        exportData();
 
     }
 
@@ -450,16 +464,50 @@ public class Management {
         System.out.println("+--------------------------------+");
     }
 
-    public void calcRevenue() {
+//    public void calcCost() {
+//        for (Product i : importProducts) {
+//            System.out.println(i.getQuantity());
+//        }
+//    }
+//
+//    public void calcRevenue() {
+//        System.out.println("============ TOTAL OF REVENUE ============");
+//        for (Product i : soldProducts) {
+//            totalRevenue += i.getQuantity() * i.getSellPrice();
+//            System.out.printf("%-15s x%-2d %6.2f %10.2f\n", i.getProductName(), i.getQuantity(), i.getSellPrice(), i.getSellPrice() * i.getQuantity());
+//        }
+//        System.out.println("---------------------------------------");
+//        System.out.printf("Total:%31.2f\n", totalRevenue);
+//        System.out.println("=======================================");
+//    }
+//
+//    public void calcProfit() {
+//
+//    }
 
+    public void exportData(){
+        try {
+            FileWriter writer = new FileWriter("product.json");
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(products, writer);
+            System.out.println("Exported successfully.");
+            writer.close();
+        } catch(Exception E){
+            System.out.println("Failed to export data.");
+        };
     }
 
-    public void calcProfit() {
-
+    public void importData(){
+        try{
+            FileReader reader = new FileReader("product.json");
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Type listType = new TypeToken<List<Product>>() {}.getType();
+            products = gson.fromJson(reader, listType);
+            reader.close();
+    } catch (Exception E){
+            System.out.println("Failed to import data.");
+        }
     }
 
-    public void calcCost() {
-
-    }
 
 }
