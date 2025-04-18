@@ -38,6 +38,7 @@ public class Management {
         do {
             System.out.print("Enter product name: ");
             productName = scanner.nextLine();
+
             for (Product i : products) {
                 if (productName.equalsIgnoreCase(i.getProductName())) {
                     isFound = i;
@@ -176,95 +177,99 @@ public class Management {
     public void addProduct() {
         boolean isExist;
         do {
-            do {
-                isExist = false;
-                System.out.print("Enter product name: ");
-                productName = scanner.nextLine();
-                for (Product i : products) {
-                    if (productName.equalsIgnoreCase(i.getProductName())) {
-                        System.out.println("+--------------------------------+");
-                        System.out.println("|      Product already exists    |");
-                        System.out.println("+--------------------------------+");
-                        isExist = true;
-                        break;
-                    }
 
-                }
-            } while (isExist); // condition check exist product
-
-
-            System.out.print("Enter product import price: ");
-            do {
-                try {
-                    importPrice = scanner.nextDouble();
-                    scanner.nextLine();
-                    if (importPrice < 0) {
-                        System.out.println("+--------------------------------+");
-                        System.out.println("|         Invalid input          |");
-                        System.out.println("+--------------------------------+");
-                        System.out.print("Enter product import price: ");
-                        continue;
-                    } // condition check valid input
+            isExist = false;
+            System.out.print("Enter product name: ");
+            productName = scanner.nextLine();
+            if (productName.trim().isEmpty()) {
+                System.out.println("Invalid product name");
+                continue;
+            }
+            for (Product i : products) {
+                if (productName.equalsIgnoreCase(i.getProductName())) {
+                    System.out.println("+--------------------------------+");
+                    System.out.println("|      Product already exists    |");
+                    System.out.println("+--------------------------------+");
+                    isExist = true;
                     break;
-                } catch (Exception E) {
-                    System.out.println("+--------------------------------+");
-                    System.out.println("|         Invalid input          |");
-                    System.out.println("+--------------------------------+");
-                    scanner.nextLine();
                 }
+
+            }// condition check exist product
+
+
+            if (!isExist) {
                 System.out.print("Enter product import price: ");
-            } while (true);  // condition check valid input
-
-            System.out.print("Enter product sell price: ");
-            do {
-                try {
-                    sellPrice = scanner.nextDouble();
-                    scanner.nextLine();
-                    if (sellPrice < 0) {
+                do {
+                    try {
+                        importPrice = scanner.nextDouble();
+                        scanner.nextLine();
+                        if (importPrice < 0) {
+                            System.out.println("+--------------------------------+");
+                            System.out.println("|         Invalid input          |");
+                            System.out.println("+--------------------------------+");
+                            System.out.print("Enter product import price: ");
+                            continue;
+                        } // condition check valid input
+                        break;
+                    } catch (Exception E) {
                         System.out.println("+--------------------------------+");
                         System.out.println("|         Invalid input          |");
                         System.out.println("+--------------------------------+");
-                        System.out.print("Enter product sell price: ");
-                        continue;
-                    }  // condition check valid input
-                    break;
-                } catch (Exception E) {
-                    System.out.println("+--------------------------------+");
-                    System.out.println("|         Invalid input          |");
-                    System.out.println("+--------------------------------+");
-                    scanner.nextLine();
-                }
+                        scanner.nextLine();
+                    }
+                    System.out.print("Enter product import price: ");
+                } while (true);  // condition check valid input
+
                 System.out.print("Enter product sell price: ");
-            } while (true);  // condition check valid input
-
-            System.out.print("Enter quantity: ");
-            do {
-                try {
-                    quantity = scanner.nextInt();
-                    scanner.nextLine();
-                    if (quantity < 0) {
+                do {
+                    try {
+                        sellPrice = scanner.nextDouble();
+                        scanner.nextLine();
+                        if (sellPrice < 0) {
+                            System.out.println("+--------------------------------+");
+                            System.out.println("|         Invalid input          |");
+                            System.out.println("+--------------------------------+");
+                            System.out.print("Enter product sell price: ");
+                            continue;
+                        }  // condition check valid input
+                        break;
+                    } catch (Exception E) {
                         System.out.println("+--------------------------------+");
                         System.out.println("|         Invalid input          |");
                         System.out.println("+--------------------------------+");
-                        System.out.print("Enter quantity: ");
-                        continue;
-                    }  // condition check valid input
-                    break;
-                } catch (Exception E) {
-                    System.out.println("+--------------------------------+");
-                    System.out.println("|         Invalid input          |");
-                    System.out.println("+--------------------------------+");
-                    scanner.nextLine();
-                }
-                System.out.print("Enter quantity: ");
-            } while (true);  // condition check valid input
+                        scanner.nextLine();
+                    }
+                    System.out.print("Enter product sell price: ");
+                } while (true);  // condition check valid input
 
-            Product product = new Product(productName, importPrice, sellPrice, quantity);
-            products.add(product);
+                System.out.print("Enter quantity: ");
+                do {
+                    try {
+                        quantity = scanner.nextInt();
+                        scanner.nextLine();
+                        if (quantity < 0) {
+                            System.out.println("+--------------------------------+");
+                            System.out.println("|         Invalid input          |");
+                            System.out.println("+--------------------------------+");
+                            System.out.print("Enter quantity: ");
+                            continue;
+                        }  // condition check valid input
+                        break;
+                    } catch (Exception E) {
+                        System.out.println("+--------------------------------+");
+                        System.out.println("|         Invalid input          |");
+                        System.out.println("+--------------------------------+");
+                        scanner.nextLine();
+                    }
+                    System.out.print("Enter quantity: ");
+                } while (true);  // condition check valid input
+
+                Product product = new Product(productName.trim(), importPrice, sellPrice, quantity);
+                products.add(product);
+            }
             System.out.print("Press Y to continue or N to exit: ");
             productName = scanner.nextLine();
         } while (!productName.equalsIgnoreCase("N"));
-
 
     }
 
@@ -276,10 +281,14 @@ public class Management {
         Product isFounded = null;
         boolean isSoldOut = false;
         String productName;
-        String answer;
+        String option;
         do {
             System.out.print("Enter product name: ");
             productName = scanner.nextLine();
+            if (productName.trim().isEmpty()) {
+                System.out.println("Invalid product name");
+                continue;
+            }
             for (Product i : products) {
                 if (productName.equalsIgnoreCase(i.getProductName())) {
                     isFounded = i;
@@ -297,8 +306,8 @@ public class Management {
                 System.out.println("|       Product not found        |");
                 System.out.println("+--------------------------------+");
                 System.out.print("Press Y to continue or N to exit: ");
-                answer = scanner.nextLine();
-                if (answer.equalsIgnoreCase("Y")) {
+                option = scanner.nextLine();
+                if (option.equalsIgnoreCase("Y")) {
                     continue;
                 } else {
                     return;
@@ -336,12 +345,12 @@ public class Management {
                 }
             }
 
-            System.out.print("Enter product name to continue or press Y to checkout: ");
+            System.out.print("Press Y to continue or N to exit: ");
             productName = scanner.nextLine();
             isFounded = null;
             isSoldOut = false;
 
-        } while (!productName.equalsIgnoreCase("Y"));
+        } while (!productName.equalsIgnoreCase("N"));
 
         System.out.println("+--------------------------------+");
         System.out.println("|          Checking out...       |");
@@ -354,8 +363,8 @@ public class Management {
 
 
         System.out.print("Print a receipt?[Y/N]");
-        answer = scanner.nextLine();
-        if (answer.equalsIgnoreCase("Y")) {
+        option = scanner.nextLine();
+        if (option.equalsIgnoreCase("Y")) {
             System.out.println("+--------------------------------+");
             System.out.println("|          Printing...           |");
             System.out.println("+--------------------------------+");
@@ -377,22 +386,33 @@ public class Management {
     }
 
     public void removeProduct() {
-        System.out.print("Enter product name: ");
-        String productName = scanner.nextLine();
+        Product isFound = null;
+        String option = "";
         do {
-            for (int i = 0; i < products.size(); i++) {
-                if (productName.equalsIgnoreCase(products.get(i).getProductName())) {
-                    products.remove(i);
-                    System.out.print("Enter product name to continue or press N to exit.");
-                    productName = scanner.nextLine();
-                } else {
-                    System.out.println("+--------------------------------+");
-                    System.out.println("|      Invalid product name      |");
-                    System.out.println("+--------------------------------+");
+
+            System.out.print("Enter product name: ");
+            productName = scanner.nextLine();
+            if (productName.trim().isEmpty()) {
+                System.out.println("Invalid product name");
+                continue;
+            }
+            for (Product i : products) {
+                if (productName.equalsIgnoreCase(i.getProductName())) {
+                    isFound = i;
+                    System.out.println("Removed product: " + isFound.getProductName());
+                    products.remove(isFound);
                     break;
                 }
             }
-        } while (!productName.equalsIgnoreCase("N"));
+            if (isFound == null) {
+                System.out.println("+--------------------------------+");
+                System.out.println("|       Product not found        |");
+                System.out.println("+--------------------------------+");
+            }
+            isFound = null;
+            System.out.print("Press Y to continue or N to exit: ");
+            option = scanner.nextLine();
+        } while (!option.equalsIgnoreCase("N"));
         System.out.println("+--------------------------------+");
         System.out.println("|          Exiting...            |");
         System.out.println("+--------------------------------+");
@@ -400,23 +420,31 @@ public class Management {
     }
 
     public void checkProduct() {
-        System.out.print("Enter product name: ");
-        String productName = scanner.nextLine();
+        String option = "";
+        Product isFound = null;
         do {
+            System.out.print("Enter product name: ");
+            productName = scanner.nextLine();
+            if (productName.trim().isEmpty()) {
+                System.out.println("Invalid product name");
+                continue;
+            }
             for (Product i : products) {
                 if (productName.equalsIgnoreCase(i.getProductName())) {
-                    System.out.println("+-------------------------------+");
-                    System.out.println(i);
-                    System.out.println("+-------------------------------+");
-                    System.out.println("Enter product name to continue or press N to exit.");
-                    productName = scanner.nextLine();
-                } else {
-                    System.out.println("+--------------------------------+");
-                    System.out.println("|      Invalid product name      |");
-                    System.out.println("+--------------------------------+");
+                    isFound = i;
+                    System.out.println("+----------------------------------------+");
+                    System.out.println(i.toString());
                 }
             }
-        } while (productName.equalsIgnoreCase("N"));
+            if (isFound == null) {
+                System.out.println("+--------------------------------+");
+                System.out.println("|       Product not found        |");
+                System.out.println("+--------------------------------+");
+            }
+            isFound = null;
+            System.out.print("Press Y to continue or N to exit: ");
+            option = scanner.nextLine();
+        } while (!option.equalsIgnoreCase("N"));
         System.out.println("+--------------------------------+");
         System.out.println("|          Exiting...            |");
         System.out.println("+--------------------------------+");

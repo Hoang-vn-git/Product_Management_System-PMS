@@ -47,9 +47,10 @@ public class Product {
     public String toString() {
         return String.format(
                 "| Product name: %-24s |\n" +
+                        "| Import price: %-24.2f |\n" +
                         "| Price:        %-24.2f |\n" +
                         "| Quantity:     %-24d |",
-                getProductName(), getSellPrice(), getQuantity()
+                getProductName(), getSellPrice(),getImportPrice(), getQuantity()
         );
     }
 }
