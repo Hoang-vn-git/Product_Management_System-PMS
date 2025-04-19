@@ -1,10 +1,20 @@
 public class Product {
+    private String id;
     private String productName;
     private double importPrice;
     private double sellPrice;
     private int quantity;
 
-    public Product(String productName, double importPrice, double sellPrice, int quantity) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Product(String id, String productName, double importPrice, double sellPrice, int quantity) {
+        this.id = id;
         this.productName = productName;
         this.importPrice = importPrice;
         this.sellPrice = sellPrice;
@@ -43,14 +53,16 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     @Override
     public String toString() {
         return String.format(
-                "| Product name: %-24s |\n" +
-                        "| Import price: %-24.2f |\n" +
-                        "| Price:        %-24.2f |\n" +
-                        "| Quantity:     %-24d |",
-                getProductName(),getImportPrice(),getSellPrice(), getQuantity()
+                """
+                        | Product name: %-24s |
+                        | Import price: %-24.2f |
+                        | Price:        %-24.2f |
+                        | Quantity:     %-24d |""",
+                getProductName(), getImportPrice(), getSellPrice(), getQuantity()
         );
     }
 }

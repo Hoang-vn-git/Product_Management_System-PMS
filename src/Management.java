@@ -4,14 +4,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class Management {
-    private double totalRevenue;
-    private double totalProfit;
-    private double totalCost;
     private String productName;
     private double importPrice;
     private double sellPrice;
@@ -23,10 +22,9 @@ public class Management {
     }
 
 
-    ArrayList<Product> products = new ArrayList<>(); // Array for current product
-    ArrayList<Product> importProducts = new ArrayList<>();
+    ArrayList<Product> products = new ArrayList<>(); // Array for a current product
     ArrayList<Product> sellProducts = new ArrayList<>(); // Array for selling product
-    ArrayList<Product> soldProducts = new ArrayList<>(); // Array for sold product
+    ArrayList<Order> orderHistory = new ArrayList<Order>();
     Scanner scanner = new Scanner(System.in);
 
     public void display() {
@@ -156,6 +154,7 @@ public class Management {
                                 break;
                             case "5":
                                 exportData();
+                                System.out.println("Saving!");
                                 break;
                             default:
                                 System.out.println("+--------------------------------+");
@@ -177,6 +176,7 @@ public class Management {
             System.out.print("Press Y to continue or N to exit: ");
             option = scanner.nextLine();
         } while (!option.equalsIgnoreCase("N"));
+        exportData();
         System.out.println("+--------------------------------+");
         System.out.println("|          Exiting...            |");
         System.out.println("+--------------------------------+");
@@ -274,13 +274,13 @@ public class Management {
                     System.out.print("Enter quantity: ");
                 } while (true);  // condition check valid input
 
-                Product product = new Product(productName.trim(), importPrice, sellPrice, quantity);
+                Product product = new Product(UUID.randomUUID().toString().substring(0,8),productName.trim(), importPrice, sellPrice, quantity);
                 products.add(product);
             }
             System.out.print("Press Y to continue or N to exit: ");
             productName = scanner.nextLine();
         } while (!productName.equalsIgnoreCase("N"));
-//        importProducts.addAll(products);
+
         exportData();
     }
 
@@ -302,7 +302,7 @@ public class Management {
             for (Product i : products) {
                 if (productName.equalsIgnoreCase(i.getProductName())) {
                     isFounded = i;
-                    if (isFounded.getQuantity() == 0) { // In case product sold out
+                    if (isFounded.getQuantity() == 0) { // In case the product sold out
                         isSoldOut = true;
                         System.out.println("+--------------------------------+");
                         System.out.println("|           Sold out             |");
@@ -325,7 +325,7 @@ public class Management {
             }
 
 
-            if (!isSoldOut) { // In case product not sold out
+            if (!isSoldOut) { // In case the product is not sold out
                 try {
                     System.out.print("Enter quantity: ");
                     sellQuantity = scanner.nextInt();
@@ -341,8 +341,13 @@ public class Management {
                     // calc subtotal
                     subtotal += sellQuantity * isFounded.getSellPrice();
                     // create a new object
-                    Product product = new Product(isFounded.getProductName(), isFounded.getImportPrice(), isFounded.getSellPrice(), sellQuantity);
+                    Product product = new Product(isFounded.getId(), isFounded.getProductName(), isFounded.getImportPrice(), isFounded.getSellPrice(), sellQuantity);
                     sellProducts.add(product);
+//                    List<Product> itemsInOrder = new ArrayList<>(sellProducts);
+//                    Order order = new Order( UUID.randomUUID().toString().substring(0, 8), itemsInOrder, TAX_RATE);
+//                    orderHistory.add(order);
+//                    exportHistory();
+
                     // set a new quantity
                     isFounded.setQuantity(isFounded.getQuantity() - sellQuantity);
 
@@ -393,8 +398,7 @@ public class Management {
             System.out.println("|          Exiting...            |");
             System.out.println("+--------------------------------+");
         }
-//        soldProducts.addAll(sellProducts);
-//        sellProducts.clear();
+        sellProducts.clear();
         exportData();
     }
 
@@ -447,7 +451,7 @@ public class Management {
                 if (productName.equalsIgnoreCase(i.getProductName())) {
                     isFound = i;
                     System.out.println("+----------------------------------------+");
-                    System.out.println(i.toString());
+                    System.out.println(i);
                 }
             }
             if (isFound == null) {
@@ -464,48 +468,40 @@ public class Management {
         System.out.println("+--------------------------------+");
     }
 
-//    public void calcCost() {
-//        for (Product i : importProducts) {
-//            System.out.println(i.getQuantity());
-//        }
-//    }
-//
-//    public void calcRevenue() {
-//        System.out.println("============ TOTAL OF REVENUE ============");
-//        for (Product i : soldProducts) {
-//            totalRevenue += i.getQuantity() * i.getSellPrice();
-//            System.out.printf("%-15s x%-2d %6.2f %10.2f\n", i.getProductName(), i.getQuantity(), i.getSellPrice(), i.getSellPrice() * i.getQuantity());
-//        }
-//        System.out.println("---------------------------------------");
-//        System.out.printf("Total:%31.2f\n", totalRevenue);
-//        System.out.println("=======================================");
-//    }
-//
-//    public void calcProfit() {
-//
-//    }
-
-    public void exportData(){
+    public void exportData() {
         try {
             FileWriter writer = new FileWriter("product.json");
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(products, writer);
-            System.out.println("Exported successfully.");
             writer.close();
-        } catch(Exception E){
+        } catch (Exception E) {
             System.out.println("Failed to export data.");
-        };
+        }
     }
+//    public void exportHistory(){
+//        try (FileWriter writer = new FileWriter("history.json")) {
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            gson.toJson(orderHistory, writer);
+//            System.out.println("✅ Order history has been exported to history.json");
+//        } catch (Exception e) {
+//            System.out.println("❌ Failed to export order history: " + e.getMessage());
+//        }
+//    }
 
-    public void importData(){
-        try{
+    public void importData() {
+        try {
             FileReader reader = new FileReader("product.json");
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            Type listType = new TypeToken<List<Product>>() {}.getType();
+            Type listType = new TypeToken<List<Product>>() {
+            }.getType();
             products = gson.fromJson(reader, listType);
+            if (products == null) {
+                products = new ArrayList<>(); // null pointer exception
+            }
             reader.close();
-    } catch (Exception E){
+        } catch (Exception E) {
             System.out.println("Failed to import data.");
+            products = new ArrayList<>();
         }
     }
 
